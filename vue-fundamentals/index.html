@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shopping list App</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+</head>
+<body>
+
+  <section id="shopping-list" class="section container box">
+    <header class="columns is-vcentered">
+      <div class="column is-three-quarters">
+        <h1 class="title is-2">
+          {{ header.toLocaleUpperCase() }}
+        </h1>
+      </div>
+
+      <div class="column buttons">
+        <button v-if="state === 'default'" @click="changeState('edit')" class="button is-primary is-medium is-fullwidth">
+          Add item
+        </button>
+  
+        <button v-else @click="changeState('default')" class="button is-danger is-medium is-fullwidth">
+          Cancel
+        </button>
+      </div>
+    </header>
+
+    <div v-if="state === 'edit'" class="columns">
+      <div class="column is-three-quarters">
+        <input v-model="newItem" @keyup.enter="saveItem" type="text" class="input is-medium" placeholder="Add an item" />
+      </div>
+      
+      <div class="column">
+        <button @click="saveItem" class="button is-primary is-medium is-fullwidth">
+          Save item
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <ul>
+        <li v-for="item in items">
+          {{ item }}
+        </li>
+      </ul>
+
+      <p v-if="items.length === 0">
+        Nice Job! You've bought all your items.
+      </p>
+    </div>
+  </section>
+  
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    var shoppingList = new Vue({
+      el: '#shopping-list',
+      data: {
+        state: 'default',
+        header: 'Shopping list app',
+        newItem: '',
+        items: [
+          // '10 party hats',
+          // '2board games',
+          // '20 cups',
+        ]
+      },
+      methods: {
+        saveItem: function() {
+          this.items.push(this.newItem);
+          this.newItem = '';
+        },
+        changeState: function(newState) {
+          this.state = newState;
+          this.newItem = '';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
