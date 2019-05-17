@@ -35,13 +35,17 @@
       </div>
       
       <div class="column">
-        <button @click="saveItem" class="button is-primary is-medium is-fullwidth">
+        <button v-bind:disabled="newItem.length <= 2" @click="saveItem" class="button is-primary is-medium is-fullwidth">
           Save item
         </button>
       </div>
     </div>
 
     <div class="content">
+      <!-- <a v-bind:href="newItem" target="_blank" rel="noopener">
+        Dynamic Link
+      </a> -->
+
       <ul>
         <li v-for="item in items">
           {{ item }}
@@ -80,5 +84,15 @@
       }
     });
   </script>
+
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
 </body>
 </html>
