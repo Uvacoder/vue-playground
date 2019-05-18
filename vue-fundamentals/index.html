@@ -19,7 +19,10 @@
       </div>
 
       <div class="column buttons">
-        <button v-if="state === 'default'" @click="changeState('edit')" class="button is-primary is-medium is-fullwidth">
+        <button v-if="state === 'default'"
+          @click="changeState('edit')"
+          class="button is-primary is-medium is-fullwidth"
+        >
           Add item
         </button>
   
@@ -32,23 +35,26 @@
     <div v-if="state === 'edit'" class="columns">
       <div class="column is-three-quarters">
         <input v-model="newItem" @keyup.enter="saveItem" type="text" class="input is-medium" placeholder="Add an item" />
+
+        <p :class="[newItem.length >= 200 ? 'priority' : '']">
+          {{ charCount }}/200
+        </p>
       </div>
       
       <div class="column">
-        <button v-bind:disabled="newItem.length <= 2" @click="saveItem" class="button is-primary is-medium is-fullwidth">
+        <button v-bind:disabled="newItem.length <= 0 || newItem.length >= 200" @click="saveItem" class="button is-primary is-medium is-fullwidth">
           Save item
         </button>
       </div>
     </div>
 
     <div class="content">
-      <!-- <a v-bind:href="newItem" target="_blank" rel="noopener">
-        Dynamic Link
-      </a> -->
-
       <ul>
-        <li v-for="item in items">
-          {{ item }}
+        <li v-for="item in reversedItems"
+          :class="{strikeout: item.purchased}"
+          @click="togglePurchased(item)"
+        >
+          {{ item.label }}
         </li>
       </ul>
 
@@ -67,19 +73,45 @@
         header: 'Shopping list app',
         newItem: '',
         items: [
-          // '10 party hats',
-          // '2board games',
-          // '20 cups',
+          {
+            label: '10 party hats',
+            purchased: false,
+            highPriority: false,
+          },
+          {
+            label: '2board games',
+            purchased: true,
+            highPriority: false,
+          },
+          {
+            label: '20 cups',
+            purchased: false,
+            highPriority: true,
+          },
         ]
+      },
+      computed: {
+        charCount() {
+          return this.newItem.length;
+        },
+        reversedItems() {
+          return this.items.slice(0).reverse();
+        }
       },
       methods: {
         saveItem: function() {
-          this.items.push(this.newItem);
+          this.items.push({
+            label: this.newItem,
+            purchased: false,
+          },);
           this.newItem = '';
         },
         changeState: function(newState) {
           this.state = newState;
           this.newItem = '';
+        },
+        togglePurchased: function(item) {
+          item.purchased = !item.purchased;
         }
       }
     });
@@ -92,6 +124,19 @@
       justify-content: center;
       width: 100vw;
       height: 100vh;
+    }
+
+    .strikeout {
+      text-decoration: line-through;
+      color: #dbdbdb;
+    }
+
+    .priority {
+      color: #ff3860;
+    }
+
+    .content ul li {
+      cursor: pointer;
     }
   </style>
 </body>
