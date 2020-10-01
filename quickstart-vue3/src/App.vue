@@ -1,7 +1,7 @@
 <template>
-  <Header logo="logo goes here." />
+  <Header logo="V3" />
 
-  <HomePage msg="Hello world of vue3" />
+  <HomePage msg="product page template" />
 </template>
 
 <script>
@@ -23,7 +23,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 </style>

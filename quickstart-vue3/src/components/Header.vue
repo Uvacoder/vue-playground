@@ -4,9 +4,9 @@
       <a href="/" class="logo">{{ logo }}</a>
 
       <ul>
-        <li><a href="/">This</a></li>
-        <li><a href="/">Is a</a></li>
-        <li><a href="/">Header</a></li>
+        <li><a href="/">About</a></li>
+        <li><a href="/">Products</a></li>
+        <li><a href="/">Contact</a></li>
       </ul>
     </nav>
   </header>
@@ -21,9 +21,10 @@ export default {
 };
 </script>
 
-<style coped>
+<style scoped>
 header {
   position: fixed;
+  z-index: 1099;
   top: 0;
   left: 0;
   right: 0;
@@ -31,6 +32,7 @@ header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   width: 100%;
 }
+
 nav {
   position: relative;
   display: flex;
@@ -41,12 +43,14 @@ nav {
   padding: 0 15px;
   margin: 0 auto;
 }
+
 .logo {
   color: #42b983;
   font-size: 30px;
   font-weight: 700;
   text-decoration: none !important;
 }
+
 ul {
   display: flex;
   list-style: none;
