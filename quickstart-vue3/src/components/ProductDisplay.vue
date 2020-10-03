@@ -3,8 +3,6 @@
     <div class="page-wrapper">
       <div class="breadcrumb">home / {{ msg }}</div>
 
-      <div class="cart">Cart({{ cart }})</div>
-
       <div class="product-display">
         <div class="product-container">
           <div :class="!inStock ? 'out-of-stock-img' : 'product-image'">
@@ -17,7 +15,7 @@
               {{ title }}
             </h1>
 
-            <p>{{ description }}</p>
+            <ProductDetails :details="description" />
 
             <ul>
               <li v-for="d in details" :key="d.id">
@@ -43,22 +41,26 @@
               </button>
             </div>
 
-            <!-- <span v-else-if="inventory <= 10 && inventory > 0">
-              Almost gone!
-            </span> -->
-
             <span v-else>Out of Stock</span>
 
-            <br />
+            <br /><br />
+
+            <div v-if="inStock">
+              <p>Shipping: {{ shipping }}</p>
+            </div>
 
             <button class="button" :disabled="!inStock" @click="addToCart()">
               Add to cart
             </button>
 
-            <button class="button" v-if="cart > 0" @click="removeToCart()">
+            <button class="button" v-if="inStock" @click="removeToCart()">
               Remove item
             </button>
           </div>
+
+          <ReviewList v-if="reviews.length" :reviews="reviews" />
+
+          <ReviewForm @review-submitted="addReview" />
         </div>
       </div>
     </div>
@@ -66,20 +68,36 @@
 </template>
 
 <script>
+import ProductDetails from "./ProductDetails";
+import ReviewForm from "./ReviewForm";
+import ReviewList from "./ReviewList";
+
 export default {
   name: "HomePage",
   props: {
     msg: String,
+    premium: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  components: {
+    ProductDetails,
+    ReviewForm,
+    ReviewList,
   },
   methods: {
     addToCart() {
-      this.cart += 1;
+      this.$emit("add-to-cart", this.variants[this.selectedVariant].id);
     },
     removeToCart() {
-      if (this.cart > 0) this.cart -= 1;
+      this.$emit("remove-to-cart", this.variants[this.selectedVariant].id);
     },
     updateProduct(index) {
       this.selectedVariant = index;
+    },
+    addReview(review) {
+      this.reviews.push(review);
     },
   },
   computed: {
@@ -98,10 +116,15 @@ export default {
       }
       return "";
     },
+    shipping() {
+      if (this.premium) {
+        return "free";
+      }
+      return 2.99;
+    },
   },
   data() {
     return {
-      cart: 0,
       product: "Socks",
       brand: "My brand name",
       description: "A nice pair of socks to warm your feet",
@@ -134,6 +157,7 @@ export default {
           quantity: 0,
         },
       ],
+      reviews: [],
       url: "#",
       onSale: true,
     };

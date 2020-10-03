@@ -1,18 +1,43 @@
 <template>
   <Header logo="V3" />
 
-  <HomePage msg="product page template" />
+  <div class="cart">Cart({{ cart.length }})</div>
+
+  <ProductDisplay
+    msg="product display template"
+    :premium="premium"
+    @add-to-cart="updateCart"
+    @remove-to-cart="decrementCart"
+  />
 </template>
 
 <script>
 import Header from "./components/Header";
-import HomePage from "./components/HomePage";
+import ProductDisplay from "./components/ProductDisplay";
 
 export default {
   name: "App",
   components: {
     Header,
-    HomePage,
+    ProductDisplay,
+  },
+  methods: {
+    updateCart(id) {
+      this.cart.push(id);
+    },
+    decrementCart(id) {
+      let index = this.cart.indexOf(id);
+
+      if (index > -1) {
+        this.cart.splice(index, 1);
+      }
+    },
+  },
+  data() {
+    return {
+      cart: [],
+      premium: true,
+    };
   },
 };
 </script>
